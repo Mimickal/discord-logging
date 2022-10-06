@@ -1,0 +1,9 @@
+# Vim things
+*.swp
+
+# Node things
+node_modules
+.nyc_output
+
+# My dev things
+todo

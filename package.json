@@ -1,0 +1,21 @@
+{
+  "name": "@mimickal/discord-logging",
+  "version": "1.0.0",
+  "description": "Standardized logging features for discord.js Discord bots",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "discord",
+    "discord.js",
+    "logging",
+    "log",
+    "library"
+  ],
+  "files": [
+    "index.js"
+  ],
+  "author": "Mimickal <mimickal.dev@gmail.com>",
+  "license": "LGPL-3.0"
+}
