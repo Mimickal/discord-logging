@@ -10,10 +10,24 @@
 /**
  * Joins the given array of strings using newlines.
  */
- function asLines(...lines) {
+function asLines(...lines) {
 	return lines.flat().join('\n');
+}
+
+/**
+ * Compresses a multi-line template string into a single continuous line.
+ * Replaces new-lines and leading whitespace with a single space, so if you need
+ * leading whitespace, try {@link asLines}.
+ * @param { string } str
+ */
+function unindent(str) {
+	return str
+		.replace(/^\s*/, '')
+		.replace(/\n\s*/g, ' ')
+		.trim();
 }
 
 module.exports = {
 	asLines,
+	unindent,
 };

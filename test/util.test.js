@@ -10,6 +10,7 @@
 const expect = require('chai').expect;
 const {
 	asLines,
+	unindent,
 } = require('..'); // Tests package exports are set up properly.
 
 describe('utils', function() {
@@ -39,5 +40,15 @@ describe(asLines.name, function() {
 			`${test_str_1}\n${test_str_2}\n${test_str_3}`
 		);
 	});
+});
+
+it(unindent.name, function() {
+	// Note: mixed whitespace intentional here
+	expect(unindent(`
+		I have
+		      some cool info
+		  here
+		 	 in this string!
+	`)).to.equal('I have some cool info here in this string!');
 });
 });
