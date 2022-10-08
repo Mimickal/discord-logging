@@ -6,8 +6,14 @@
  * GNU Lesser General Public License v3.0. See LICENSE.md or
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
-const createLogger = require('./logger');
+
+/**
+ * Joins the given array of strings using newlines.
+ */
+ function asLines(...lines) {
+	return lines.flat().join('\n');
+}
+
 module.exports = {
-	createLogger,
-	...require('./utils'),
+	asLines,
 };
