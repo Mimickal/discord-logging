@@ -9,7 +9,21 @@
 
 const expect = require('chai').expect;
 const {
+	ApplicationCommandOptionType,
+	Client,
+	ChatInputCommandInteraction,
+	Emoji,
+	Guild,
+	GuildMember,
+	Message,
+	MessageReaction,
+	Role,
+	User,
+} = require('discord.js');
+
+const {
 	asLines,
+	stringify,
 	unindent,
 } = require('..'); // Tests package exports are set up properly.
 
@@ -50,5 +64,117 @@ it(unindent.name, function() {
 		  here
 		 	 in this string!
 	`)).to.equal('I have some cool info here in this string!');
+});
+
+describe(stringify.name, function() {
+	const channel_id = 'test_channel_id';
+	const emoji_id = 'test_emoji_id';
+	// Needs to be a realish ID so Snowflake can extract a timestamp from it.
+	const message_id = '1028556214147223623';
+	const guild_id = 'test_guild_id';
+	const user_id = 'test_user_id';
+
+	const test_client = new Client({ intents: [] });
+	const test_emoji = new Emoji(test_client, { id: emoji_id });
+	const test_guild = new Guild(test_client, { id: guild_id });
+	const test_message = new Message(test_client, {
+		id: message_id,
+		channel_id,
+		guild_id,
+	});
+	const test_user = new User(test_client, { id: user_id });
+
+	it(ChatInputCommandInteraction.name, function() {
+		const command = new ChatInputCommandInteraction(test_client, {
+			user: {},
+			data: {
+				name: 'testname',
+				options: [{
+					type: ApplicationCommandOptionType.SubcommandGroup,
+					name: 'subgroup',
+					options: [{
+						type: ApplicationCommandOptionType.Subcommand,
+						name: 'subname',
+					}],
+				}],
+			},
+		});
+
+		expect(stringify(command))
+			.to.equal('Command "testname subgroup subname"');
+	});
+
+	it('Emoji (built-in)', function() {
+		expect(stringify('🦊')).to.equal('Emoji 🦊');
+	});
+
+	it('Emoji (object)', function() {
+		expect(stringify(test_emoji)).to.equal(`Emoji ${emoji_id}`);
+	});
+
+	it(Guild.name, function() {
+		expect(stringify(test_guild)).to.equal(`Guild ${guild_id}`);
+	});
+
+	it(GuildMember.name, function() {
+		const member = new GuildMember(
+			test_client, { user: test_user }, test_guild
+		);
+		expect(stringify(member)).to.equal(`User ${user_id}`);
+	});
+
+	it(Message.name, function() {
+		expect(stringify(test_message)).to.equal(
+			`Message https://discord.com/channels/${guild_id}/${channel_id}/${message_id}`
+		);
+	});
+
+	it(MessageReaction.name, function() {
+		const react = new MessageReaction(
+			test_client, { emoji: test_emoji }, test_message
+		);
+		expect(stringify(react)).to.equal(`Reaction ${emoji_id}`);
+	});
+
+	it(Role.name, function() {
+		const id = 'test_role_id';
+		const role = new Role(test_client, { id }, test_guild);
+		expect(stringify(role)).to.equal(`Role ${id}`);
+	});
+
+	it(User.name, function() {
+		expect(stringify(test_user)).to.equal(`User ${user_id}`);
+	});
+
+	it('undefined', function() {
+		expect(stringify(undefined)).to.equal('[undefined]');
+	});
+
+	it('null', function() {
+		expect(stringify(null)).to.equal('[null]');
+	});
+
+	it('number', function() {
+		expect(stringify(1234)).to.equal('1234');
+	});
+
+	it('string (that looks like an ID)', function() {
+		const id = '1028556214147223623';
+		expect(stringify(id)).to.equal(id);
+	});
+
+	it('Array of things', function() {
+		expect(stringify([test_emoji, test_user, 'hello'])).to.equal(
+			`Emoji ${emoji_id}, User ${user_id}, hello`
+		);
+	});
+
+	it('Arbitrary data', function() {
+		const nonsense = {
+			something: 'test',
+			other: 'thing',
+		};
+		expect(stringify(nonsense)).to.equal(JSON.stringify(nonsense));
+	});
 });
 });

@@ -3,6 +3,7 @@
 
 # Node things
 node_modules
+coverage
 .nyc_output
 
 # My dev things

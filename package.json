@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Standardized logging features for discord.js Discord bots",
   "main": "src/index.js",
+  "engines": {
+    "node": ">=16.9.0"
+  },
   "scripts": {
     "test": "mocha test/*",
     "test:coverage": "nyc --reporter=text mocha test/*"
@@ -22,8 +25,12 @@
   "dependencies": {
     "winston": "^3.8.2"
   },
+  "peerDependencies": {
+    "discord.js": "^14"
+  },
   "devDependencies": {
     "chai": "^4.3.6",
+    "discord.js": "^14.5.0",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0"
   }
