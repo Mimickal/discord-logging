@@ -23,6 +23,7 @@ const {
 
 const {
 	asLines,
+	detail,
 	stringify,
 	unindent,
 } = require('..'); // Tests package exports are set up properly.
@@ -82,25 +83,30 @@ describe(stringify.name, function() {
 		channel_id,
 		guild_id,
 	});
+	const test_react = new MessageReaction(
+		test_client, { emoji: test_emoji }, test_message
+	);
 	const test_user = new User(test_client, { id: user_id });
+	const test_command = new ChatInputCommandInteraction(test_client, {
+		user: test_user,
+		guild_id,
+		data: {
+			name: 'testname',
+			options: [{
+				type: ApplicationCommandOptionType.SubcommandGroup,
+				name: 'subgroup',
+				options: [{
+					type: ApplicationCommandOptionType.Subcommand,
+					name: 'subname',
+				}],
+			}],
+		},
+	});
+
+	test_client.guilds.cache.set(guild_id, test_guild);
 
 	it(ChatInputCommandInteraction.name, function() {
-		const command = new ChatInputCommandInteraction(test_client, {
-			user: {},
-			data: {
-				name: 'testname',
-				options: [{
-					type: ApplicationCommandOptionType.SubcommandGroup,
-					name: 'subgroup',
-					options: [{
-						type: ApplicationCommandOptionType.Subcommand,
-						name: 'subname',
-					}],
-				}],
-			},
-		});
-
-		expect(stringify(command))
+		expect(stringify(test_command))
 			.to.equal('Command "testname subgroup subname"');
 	});
 
@@ -130,10 +136,7 @@ describe(stringify.name, function() {
 	});
 
 	it(MessageReaction.name, function() {
-		const react = new MessageReaction(
-			test_client, { emoji: test_emoji }, test_message
-		);
-		expect(stringify(react)).to.equal(`Reaction ${emoji_id}`);
+		expect(stringify(test_react)).to.equal(`Reaction ${emoji_id}`);
 	});
 
 	it(Role.name, function() {
@@ -175,6 +178,24 @@ describe(stringify.name, function() {
 			other: 'thing',
 		};
 		expect(stringify(nonsense)).to.equal(JSON.stringify(nonsense));
+	});
+
+	describe(detail.name, function() {
+		it(ChatInputCommandInteraction.name, function() {
+			expect(detail(test_command)).to.equal(
+				`Guild ${guild_id} User ${user_id} Command "testname subgroup subname"`
+			);
+		});
+
+		it(MessageReaction.name, function() {
+			expect(detail(test_react)).to.equal(
+				`Reaction ${emoji_id} on Message https://discord.com/channels/${guild_id}/${channel_id}/${message_id}`
+			);
+		});
+
+		it(`Falls back on ${stringify.name}`, function() {
+			expect(detail(test_user)).to.equal(stringify(test_user));
+		});
 	});
 });
 });

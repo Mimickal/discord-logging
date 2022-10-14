@@ -33,6 +33,24 @@ function asLines(...lines) {
 }
 
 /**
+ * Like stringify, but provides more detail. Falls back on stringify.
+ */
+function detail(thing) {
+	if (thing instanceof CommandInteraction) {
+		const int = thing;
+		return `${stringify(int.guild)} ${stringify(int.user)} ${stringify(int)}`;
+	}
+	else if (thing instanceof MessageReaction) {
+		const reaction = thing;
+		return `${stringify(reaction)} on ${stringify(reaction.message)}`;
+	}
+	else {
+		// Fall back on standard strings
+		return stringify(thing);
+	}
+}
+
+/**
  * Given a Discord.js object, returns a logger-friendly string describing it in
  * better detail. Arrays of things are stringified as a comma-separated list.
  * Has reasonable fallbacks for JS built-ins like numbers, dates, and objects.
@@ -47,7 +65,7 @@ function stringify(thing) {
 			interaction.commandName,
 			interaction.options.getSubcommandGroup(false),
 			interaction.options.getSubcommand(false),
-		).filter(x => x).join(' ');
+		).filter(Boolean).join(' ');
 		return `Command "${cmd_str}"`;
 	}
 	else if (thing instanceof Guild) {
@@ -136,6 +154,7 @@ function _stringifyEmoji(emoji) {
 module.exports = {
 	DISCORD_ID_PATTERN,
 	asLines,
+	detail,
 	stringify,
 	unindent,
 };
