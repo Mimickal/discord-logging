@@ -5,6 +5,8 @@
 node_modules
 coverage
 .nyc_output
+lib
+*.tgz
 
 # My dev things
 todo

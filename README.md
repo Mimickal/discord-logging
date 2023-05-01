@@ -4,8 +4,9 @@
 src="https://www.gnu.org/graphics/lgplv3-with-text-154x68.png">
 </a>
 
-This is a collection of tools for logging Discord bot actions.
-It requires Discord.js version 14.x as a peer-dependency.
+This is a collection of tools for logging Discord.js bot actions.
+It is built on [winston](https://www.npmjs.com/package/winston), and requires
+Discord.js version 14.x as a peer-dependency.
 
 ## License
 
