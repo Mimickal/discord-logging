@@ -57,7 +57,6 @@ const LOG_FORMAT = Winston.format.combine(
  * @see {@link LoggerProps} for more details.
  */
 export default function createLogger({
-	/**BAlls */
 	filename,
 	debug         = (process.env.NODE_ENV !== 'production'),
 	level_console = Level.error,
