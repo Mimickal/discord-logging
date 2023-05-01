@@ -10,6 +10,7 @@
   "scripts": {
     "build": "tsc",
     "clean": "rm lib/*",
+    "prepack": "npm run clean && npm run build && npm test",
     "test": "mocha test/*",
     "test:coverage": "nyc --reporter=text mocha test/*"
   },
@@ -21,7 +22,7 @@
     "library"
   ],
   "files": [
-    "src/*"
+    "lib/*"
   ],
   "author": "Mimickal <mimickal.dev@gmail.com>",
   "license": "LGPL-3.0",
