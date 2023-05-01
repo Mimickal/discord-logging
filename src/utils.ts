@@ -31,7 +31,7 @@ export const DISCORD_ID_PATTERN = RegExp('^\\d{17,22}$');
 /**
  * Joins the given array of strings using newlines.
  */
-export function asLines(...lines: string[]): string {
+export function asLines(...lines: (string | string[])[]): string {
 	return lines.flat().join('\n');
 }
 

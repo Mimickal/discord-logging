@@ -6,9 +6,8 @@
  * GNU Lesser General Public License v3.0. See LICENSE.md or
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
-
-const expect = require('chai').expect;
-const {
+import { expect } from 'chai';
+import {
 	ApplicationCommandOptionType,
 	Client,
 	ChatInputCommandInteraction,
@@ -19,14 +18,14 @@ const {
 	MessageReaction,
 	Role,
 	User,
-} = require('discord.js');
+} from 'discord.js';
 
-const {
+import {
 	asLines,
 	detail,
 	stringify,
 	unindent,
-} = require('..'); // Tests package exports are set up properly.
+} from '../src'; // Tests package exports are set up properly.
 
 describe('utils', function() {
 describe(asLines.name, function() {
@@ -75,18 +74,31 @@ describe(stringify.name, function() {
 	const guild_id = 'test_guild_id';
 	const user_id = 'test_user_id';
 
+
+	// Almost all of these constructors are private or protected. That already
+	// requires us to ignore TypeScript errors. Another effect of this is that
+	// the data payloads have crazy nested typing that's totally unreasonable
+	// for us to replicate here.
+
 	const test_client = new Client({ intents: [] });
+	// @ts-ignore
 	const test_emoji = new Emoji(test_client, { id: emoji_id });
+	// @ts-ignore
 	const test_guild = new Guild(test_client, { id: guild_id });
+	// @ts-ignore
 	const test_message = new Message(test_client, {
 		id: message_id,
 		channel_id,
 		guild_id,
 	});
+	// @ts-ignore
 	const test_react = new MessageReaction(
 		test_client, { emoji: test_emoji }, test_message
 	);
+	// @ts-ignore
 	const test_user = new User(test_client, { id: user_id });
+
+	// @ts-ignore
 	const test_command = new ChatInputCommandInteraction(test_client, {
 		user: test_user,
 		guild_id,
@@ -123,6 +135,7 @@ describe(stringify.name, function() {
 	});
 
 	it(GuildMember.name, function() {
+		// @ts-ignore
 		const member = new GuildMember(
 			test_client, { user: test_user }, test_guild
 		);
@@ -141,6 +154,7 @@ describe(stringify.name, function() {
 
 	it(Role.name, function() {
 		const id = 'test_role_id';
+		// @ts-ignore
 		const role = new Role(test_client, { id }, test_guild);
 		expect(stringify(role)).to.equal(`Role ${id}`);
 	});

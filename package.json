@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "tsc",
+    "clean": "rm lib/*",
     "test": "mocha test/*",
     "test:coverage": "nyc --reporter=text mocha test/*"
   },
@@ -31,9 +32,12 @@
     "discord.js": "^14"
   },
   "devDependencies": {
+    "@types/chai": "^4.3.5",
+    "@types/mocha": "^10.0.1",
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",
+    "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   }
 }
