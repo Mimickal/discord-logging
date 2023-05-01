@@ -6,8 +6,6 @@
  * GNU Lesser General Public License v3.0. See LICENSE.md or
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
-const createLogger = require('./logger');
-module.exports = {
-	createLogger,
-	...require('./utils'),
-};
+import createLogger from './logger';
+export { createLogger };
+export * from './utils';
