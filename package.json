@@ -24,6 +24,13 @@
   "files": [
     "lib/*"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mimickal/discord-logging.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Mimickal/discord-logging/issues"
+  },
   "author": "Mimickal <mimickal.dev@gmail.com>",
   "license": "LGPL-3.0",
   "dependencies": {
