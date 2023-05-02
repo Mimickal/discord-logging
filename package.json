@@ -11,7 +11,8 @@
     "build": "tsc",
     "clean": "rm lib/*",
     "prepack": "npm run clean && npm run build && npm test",
-    "install": "npm run build",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm test",
     "test": "mocha test/*",
     "test:coverage": "nyc --reporter=text mocha test/*"
   },

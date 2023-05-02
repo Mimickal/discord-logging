@@ -5,12 +5,12 @@
 		"module": "CommonJS",
 		"target": "ES2022",
 
-		"allowJs": true,
 		"esModuleInterop": true,
 		"strict": true,
 
 		"outDir": "lib",
 		"declaration": true
 	},
-	"include": ["src/*"]
+	"include": ["src"],
+	"exclude": ["node_modules", "tests/*"]
 }
