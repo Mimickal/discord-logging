@@ -9,6 +9,7 @@
 import * as Winston from 'winston';
 
 export enum Level {
+	none = 'none',
 	error = 'error',
 	warn = 'warn',
 	help = 'help',
@@ -64,7 +65,7 @@ export default function createLogger({
 }: LoggerProps): Winston.Logger {
 	const logger = Winston.createLogger();
 
-	if (filename) {
+	if (filename && level_file !== Level.none) {
 		logger.add(new Winston.transports.File({
 			filename: filename,
 			format: LOG_FORMAT,
@@ -72,13 +73,15 @@ export default function createLogger({
 		}));
 	}
 
-	logger.add(new Winston.transports.Console({
-		format: Winston.format.combine(
-			Winston.format.colorize(),
-			LOG_FORMAT,
-		),
-		level: debug ? 'debug' : level_console,
-	}));
+	if (level_console !== Level.none) {
+		logger.add(new Winston.transports.Console({
+			format: Winston.format.combine(
+				Winston.format.colorize(),
+				LOG_FORMAT,
+			),
+			level: debug ? 'debug' : level_console,
+		}));
+	}
 
 	// Rolling our own unhandled exception and Promise rejection handlers,
 	// because Winston's built-in ones kind of suck.
