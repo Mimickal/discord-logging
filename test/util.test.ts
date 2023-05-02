@@ -13,6 +13,7 @@ import {
 	ChatInputCommandInteraction,
 	Emoji,
 	Guild,
+	GuildBan,
 	GuildMember,
 	Message,
 	MessageReaction,
@@ -97,6 +98,11 @@ describe(stringify.name, function() {
 	);
 	// @ts-ignore
 	const test_user = new User(test_client, { id: user_id });
+	// @ts-ignore
+	const test_ban = new GuildBan(test_client, {
+		guild_id,
+		user: test_user,
+	}, test_guild);
 
 	// @ts-ignore
 	const test_command = new ChatInputCommandInteraction(test_client, {
@@ -132,6 +138,10 @@ describe(stringify.name, function() {
 
 	it(Guild.name, function() {
 		expect(stringify(test_guild)).to.equal(`Guild ${guild_id}`);
+	});
+
+	it(GuildBan.name, function() {
+		expect(stringify(test_ban)).to.equal(`Ban of User ${user_id} in Guild ${guild_id}`);
 	});
 
 	it(GuildMember.name, function() {
@@ -209,6 +219,8 @@ describe(stringify.name, function() {
 
 		it(`Falls back on ${stringify.name}`, function() {
 			expect(detail(test_user)).to.equal(stringify(test_user));
+
+			expect(detail(null)).to.equal('[null]');
 		});
 	});
 });

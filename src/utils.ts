@@ -7,11 +7,11 @@
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
  import {
-	Base,
 	ChatInputCommandInteraction,
 	CommandInteraction,
 	Emoji,
 	Guild,
+	GuildBan,
 	GuildMember,
 	Message,
 	MessageReaction,
@@ -38,7 +38,7 @@ export function asLines(...lines: (string | string[])[]): string {
 /**
  * Like {@link stringify}, but provides more detail. Falls back on stringify.
  */
-export function detail(thing: Base): string {
+export function detail(thing: unknown): string {
 	if (thing instanceof CommandInteraction) {
 		const int = thing;
 		return `${stringify(int.guild)} ${stringify(int.user)} ${stringify(int)}`;
@@ -72,32 +72,28 @@ export function stringify(thing: unknown): string {
 		return `Command "${cmd_str}"`;
 	}
 	else if (thing instanceof Guild) {
-		const guild = thing;
-		return `Guild ${guild.id}`;
+		return `Guild ${thing.id}`;
+	}
+	else if (thing instanceof GuildBan) {
+		return `Ban of ${stringify(thing.user)} in ${stringify(thing.guild)}`;
 	}
 	else if (thing instanceof GuildMember) {
-		const member = thing;
-		return `User ${member.id}`; // Same as member.user.id
+		return `User ${thing.id}`; // Same as member.user.id
 	}
 	else if (thing instanceof Message) {
-		const message = thing;
-		return `Message ${message.url}`;
+		return `Message ${thing.url}`;
 	}
 	else if (thing instanceof MessageReaction) {
-		const reaction = thing;
-		return `Reaction ${_stringifyEmoji(reaction.emoji)}`;
+		return `Reaction ${_stringifyEmoji(thing.emoji)}`;
 	}
 	else if (thing instanceof Role) {
-		const role = thing;
-		return `Role ${role.id}`;
+		return `Role ${thing.id}`;
 	}
 	else if (thing instanceof User) {
-		const user = thing;
-		return `User ${user.id}`;
+		return `User ${thing.id}`;
 	}
 	else if (_isEmoji(thing)) {
-		const emoji = thing;
-		return `Emoji ${_stringifyEmoji(emoji)}`;
+		return `Emoji ${_stringifyEmoji(thing)}`;
 	}
 	else if (Array.isArray(thing)) {
 		return thing.map(t => stringify(t)).join(', ');

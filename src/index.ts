@@ -6,6 +6,9 @@
  * GNU Lesser General Public License v3.0. See LICENSE.md or
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
+// Also forward Logger type so callers only need to interact with this library.
+import { Logger } from 'winston';
 import createLogger from './logger';
-export { createLogger };
+export { createLogger, Logger };
+export * from './logger';
 export * from './utils';
