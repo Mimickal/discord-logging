@@ -38,7 +38,7 @@ export function asLines(...lines: (string | string[])[]): string {
 /**
  * Like {@link stringify}, but provides more detail. Falls back on stringify.
  */
-export function detail(thing: Base): string {
+export function detail(thing: unknown): string {
 	if (thing instanceof CommandInteraction) {
 		const int = thing;
 		return `${stringify(int.guild)} ${stringify(int.user)} ${stringify(int)}`;

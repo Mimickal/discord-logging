@@ -209,6 +209,8 @@ describe(stringify.name, function() {
 
 		it(`Falls back on ${stringify.name}`, function() {
 			expect(detail(test_user)).to.equal(stringify(test_user));
+
+			expect(detail(null)).to.equal('[null]');
 		});
 	});
 });
