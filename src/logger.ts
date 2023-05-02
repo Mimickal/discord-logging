@@ -57,12 +57,14 @@ const LOG_FORMAT = Winston.format.combine(
  *
  * @see {@link LoggerProps} for more details.
  */
-export default function createLogger({
-	filename,
-	debug         = (process.env.NODE_ENV !== 'production'),
-	level_console = Level.error,
-	level_file    = Level.info,
-}: LoggerProps): Winston.Logger {
+export default function createLogger(props?: LoggerProps): Winston.Logger {
+	const {
+		filename,
+		debug         = (process.env.NODE_ENV !== 'production'),
+		level_console = Level.error,
+		level_file    = Level.info,
+	} = props ?? {};
+
 	const logger = Winston.createLogger();
 
 	if (filename && level_file !== Level.none) {
