@@ -7,11 +7,11 @@
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
  import {
-	Base,
 	ChatInputCommandInteraction,
 	CommandInteraction,
 	Emoji,
 	Guild,
+	GuildBan,
 	GuildMember,
 	Message,
 	MessageReaction,
@@ -74,6 +74,9 @@ export function stringify(thing: unknown): string {
 	else if (thing instanceof Guild) {
 		const guild = thing;
 		return `Guild ${guild.id}`;
+	}
+	else if (thing instanceof GuildBan) {
+		return `Ban of ${stringify(thing.user)} in ${stringify(thing.guild)}`;
 	}
 	else if (thing instanceof GuildMember) {
 		const member = thing;
