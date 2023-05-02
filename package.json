@@ -46,7 +46,9 @@
     "@types/mocha": "^10.0.1",
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
+    "node-watch": "^0.7.3",
     "nyc": "^15.1.0",
+    "std-mocks": "^1.0.1",
     "ts-node": "^10.9.1",
     "typescript": "^5.0.4"
   }
