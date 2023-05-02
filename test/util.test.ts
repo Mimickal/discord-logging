@@ -204,6 +204,11 @@ describe(stringify.name, function() {
 		expect(stringify(nonsense)).to.equal(JSON.stringify(nonsense));
 	});
 
+	it(BigInt.name, function() {
+		const num_str = '123456789123456789123456789';
+		expect(stringify(BigInt(num_str))).to.equal(num_str);
+	})
+
 	describe(detail.name, function() {
 		it(ChatInputCommandInteraction.name, function() {
 			expect(detail(test_command)).to.equal(

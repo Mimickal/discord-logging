@@ -98,6 +98,9 @@ export function stringify(thing: unknown): string {
 	else if (Array.isArray(thing)) {
 		return thing.map(t => stringify(t)).join(', ');
 	}
+	else if (typeof thing === 'bigint') {
+		return thing.toString();
+	}
 	else if (typeof thing === 'string' || thing instanceof String) {
 		return thing.toString();
 	}
