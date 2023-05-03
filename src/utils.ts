@@ -114,7 +114,11 @@ export function stringify(thing: unknown): string {
 		return '[null]';
 	}
 	else { // numbers, dates, objects, etc...
-		return JSON.stringify(thing);
+		try {
+			return JSON.stringify(thing);
+		} catch (err) {
+			return '[MissingNo.]';
+		}
 	}
 }
 

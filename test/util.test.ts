@@ -220,7 +220,15 @@ describe(stringify.name, function() {
 	it(BigInt.name, function() {
 		const num_str = '123456789123456789123456789';
 		expect(stringify(BigInt(num_str))).to.equal(num_str);
-	})
+	});
+
+	it('Gracefully handles things that cannot be serialized', function() {
+		const weird_thing = {
+			something: 'test',
+			bad_field: BigInt('123456789'),
+		};
+		expect(stringify(weird_thing)).to.equal('[MissingNo.]');
+	});
 
 	describe(detail.name, function() {
 		it(ChatInputCommandInteraction.name, function() {
