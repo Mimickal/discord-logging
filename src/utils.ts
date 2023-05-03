@@ -7,6 +7,7 @@
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
  import {
+	ButtonInteraction,
 	ChatInputCommandInteraction,
 	CommandInteraction,
 	Emoji,
@@ -17,7 +18,6 @@
 	MessageReaction,
 	Role,
 	User,
-
 } from 'discord.js';
 
 /**
@@ -61,7 +61,10 @@ export function detail(thing: unknown): string {
  * This purposely only outputs IDs to limit the amount of user data logged.
  */
 export function stringify(thing: unknown): string {
-	if (thing instanceof CommandInteraction) {
+	if (thing instanceof ButtonInteraction) {
+		return `Button "${thing.customId}"`;
+	}
+	else if (thing instanceof CommandInteraction) {
 		const cmd_str = Array.of(
 			thing.commandName,
 			...(thing instanceof ChatInputCommandInteraction ? [

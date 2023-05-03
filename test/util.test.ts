@@ -19,6 +19,7 @@ import {
 	MessageReaction,
 	Role,
 	User,
+	ButtonInteraction,
 } from 'discord.js';
 
 import {
@@ -68,6 +69,7 @@ it(unindent.name, function() {
 });
 
 describe(stringify.name, function() {
+	const button_id = 'test_button_id';
 	const channel_id = 'test_channel_id';
 	const emoji_id = 'test_emoji_id';
 	// Needs to be a realish ID so Snowflake can extract a timestamp from it.
@@ -80,12 +82,15 @@ describe(stringify.name, function() {
 	// requires us to ignore TypeScript errors. Another effect of this is that
 	// the data payloads have crazy nested typing that's totally unreasonable
 	// for us to replicate here.
+	// Basically this is terrible and I'm ashamed.
 
 	const test_client = new Client({ intents: [] });
 	// @ts-ignore
 	const test_emoji = new Emoji(test_client, { id: emoji_id });
 	// @ts-ignore
 	const test_guild = new Guild(test_client, { id: guild_id });
+	// @ts-ignore
+	const test_user = new User(test_client, { id: user_id });
 	// @ts-ignore
 	const test_message = new Message(test_client, {
 		id: message_id,
@@ -97,7 +102,11 @@ describe(stringify.name, function() {
 		test_client, { emoji: test_emoji }, test_message
 	);
 	// @ts-ignore
-	const test_user = new User(test_client, { id: user_id });
+	const test_button = new ButtonInteraction(test_client, {
+		user: test_user,
+		message: { id: message_id, channel_id },
+		data: { custom_id: button_id },
+	});
 	// @ts-ignore
 	const test_ban = new GuildBan(test_client, {
 		guild_id,
@@ -122,6 +131,10 @@ describe(stringify.name, function() {
 	});
 
 	test_client.guilds.cache.set(guild_id, test_guild);
+
+	it(ButtonInteraction.name, function() {
+		expect(stringify(test_button)).to.equal(`Button "${button_id}"`);
+	});
 
 	it(ChatInputCommandInteraction.name, function() {
 		expect(stringify(test_command))
