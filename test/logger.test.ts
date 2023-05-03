@@ -63,7 +63,7 @@ describe(createLogger.name, function() {
 	});
 
 	after(function() {
-		//rmSync(TEST_DIR, { force: true, recursive: true });
+		rmSync(TEST_DIR, { force: true, recursive: true });
 	});
 
 	// Logging is hard to test. There are a few things we can't really test:
