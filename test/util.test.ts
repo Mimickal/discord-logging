@@ -9,17 +9,19 @@
 import { expect } from 'chai';
 import {
 	ApplicationCommandOptionType,
+	ButtonInteraction,
 	Client,
 	ChatInputCommandInteraction,
+	ComponentType,
 	Emoji,
 	Guild,
 	GuildBan,
 	GuildMember,
+	InteractionType,
 	Message,
 	MessageReaction,
 	Role,
 	User,
-	ButtonInteraction,
 } from 'discord.js';
 
 import {
@@ -105,7 +107,11 @@ describe(stringify.name, function() {
 	const test_button = new ButtonInteraction(test_client, {
 		user: test_user,
 		message: { id: message_id, channel_id },
-		data: { custom_id: button_id },
+		data: {
+			component_type: ComponentType.Button,
+			custom_id: button_id,
+		},
+		type: InteractionType.MessageComponent,
 	});
 	// @ts-ignore
 	const test_ban = new GuildBan(test_client, {

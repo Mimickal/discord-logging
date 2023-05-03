@@ -15,6 +15,7 @@
 	GuildBan,
 	GuildMember,
 	Message,
+	MessageComponentInteraction,
 	MessageReaction,
 	Role,
 	User,
@@ -61,10 +62,7 @@ export function detail(thing: unknown): string {
  * This purposely only outputs IDs to limit the amount of user data logged.
  */
 export function stringify(thing: unknown): string {
-	if (thing instanceof ButtonInteraction) {
-		return `Button "${thing.customId}"`;
-	}
-	else if (thing instanceof CommandInteraction) {
+	if (thing instanceof CommandInteraction) {
 		const cmd_str = Array.of(
 			thing.commandName,
 			...(thing instanceof ChatInputCommandInteraction ? [
@@ -85,6 +83,10 @@ export function stringify(thing: unknown): string {
 	}
 	else if (thing instanceof Message) {
 		return `Message ${thing.url}`;
+	}
+	else if (thing instanceof MessageComponentInteraction) {
+		const name = thing.isButton() ? 'Button' : 'Component';
+		return `${name} "${thing.customId}"`;
 	}
 	else if (thing instanceof MessageReaction) {
 		return `Reaction ${_stringifyEmoji(thing.emoji)}`;
