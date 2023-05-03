@@ -6,12 +6,19 @@
  * GNU Lesser General Public License v3.0. See LICENSE.md or
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
-// Also forward Logger type so callers only need to interact with this library.
-import { Logger } from 'winston';
+import { expect } from 'chai';
 
-import GlobalLogger from './global';
-import createLogger from './logger';
+import { GlobalLogger, createLogger } from '../src';
 
-export { createLogger, GlobalLogger, Logger };
-export * from './logger';
-export * from './utils';
+describe(GlobalLogger.name, function() {
+	it('Error thrown when accessing undefined global logger', function() {
+		expect(() => GlobalLogger.logger).to.throw('No global logger set!');
+	});
+
+	it('Global logger accessible globally', function() {
+		const test_logger = createLogger();
+		GlobalLogger.setGlobalLogger(test_logger);
+
+		expect(GlobalLogger.logger).to.equal(test_logger);
+	});
+});

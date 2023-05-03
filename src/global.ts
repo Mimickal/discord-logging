@@ -6,12 +6,19 @@
  * GNU Lesser General Public License v3.0. See LICENSE.md or
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
-// Also forward Logger type so callers only need to interact with this library.
 import { Logger } from 'winston';
 
-import GlobalLogger from './global';
-import createLogger from './logger';
+export default class GlobalLogger {
+	static #_logger: Logger | undefined;
 
-export { createLogger, GlobalLogger, Logger };
-export * from './logger';
-export * from './utils';
+	static get logger(): Logger {
+		if (!GlobalLogger.#_logger) {
+			throw new Error('No global logger set!');
+		}
+		return GlobalLogger.#_logger;
+	}
+
+	static setGlobalLogger(logger: Logger | undefined): void {
+		GlobalLogger.#_logger = logger;
+	}
+}
