@@ -7,12 +7,26 @@
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
 import { expect } from 'chai';
+// @ts-ignore Library isn't written in TypeScript
+import stdMocks from 'std-mocks';
 
 import { GlobalLogger, createLogger } from '../src';
 
 describe(GlobalLogger.name, function() {
-	it('Error thrown when accessing undefined global logger', function() {
-		expect(() => GlobalLogger.logger).to.throw('No global logger set!');
+	afterEach(function() {
+		// Just to be safe.
+		stdMocks.restore();
+		stdMocks.flush();
+	});
+
+	it('Undefined global logger does a no-op gracefully', function() {
+		GlobalLogger.setGlobalLogger(undefined);
+
+		stdMocks.use();
+		GlobalLogger.logger.info('Test message');
+		stdMocks.restore();
+
+		expect(stdMocks.flush().stdout).to.be.empty;
 	});
 
 	it('Global logger accessible globally', function() {
