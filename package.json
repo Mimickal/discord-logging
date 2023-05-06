@@ -1,6 +1,6 @@
 {
   "name": "@mimickal/discord-logging",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Standardized logging features for discord.js Discord bots",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
