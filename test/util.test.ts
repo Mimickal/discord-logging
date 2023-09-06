@@ -22,6 +22,8 @@ import {
 	MessageReaction,
 	Role,
 	User,
+	TextChannel,
+	ChannelType,
 } from 'discord.js';
 
 import {
@@ -92,6 +94,12 @@ describe(stringify.name, function() {
 	// @ts-ignore
 	const test_guild = new Guild(test_client, { id: guild_id });
 	// @ts-ignore
+	const test_channel = new TextChannel(test_guild, {
+		id: channel_id,
+		type: ChannelType.GuildText,
+		permissions: '',
+	}, test_client);
+	// @ts-ignore
 	const test_user = new User(test_client, { id: user_id });
 	// @ts-ignore
 	const test_message = new Message(test_client, {
@@ -145,6 +153,11 @@ describe(stringify.name, function() {
 	it(ChatInputCommandInteraction.name, function() {
 		expect(stringify(test_command))
 			.to.equal('Command "testname subgroup subname"');
+	});
+
+	it(TextChannel.name, function() {
+		expect(stringify(test_channel))
+			.to.equal(`Channel ${channel_id}`);
 	});
 
 	it('Emoji (built-in)', function() {
