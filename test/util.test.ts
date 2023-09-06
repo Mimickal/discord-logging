@@ -29,6 +29,7 @@ import {
 import {
 	asLines,
 	detail,
+	startupMsg,
 	stringify,
 	unindent,
 } from '../src'; // Tests package exports are set up properly.
@@ -70,6 +71,43 @@ it(unindent.name, function() {
 		  here
 		 	 in this string!
 	`)).to.equal('I have some cool info here in this string!');
+});
+
+describe(startupMsg.name, function() {
+	const version = 'test_version';
+	const config = {
+		aaa: 123,
+		bbb: true,
+		ccc: 'hi'
+	};
+
+	it('No config', function() {
+		expect(startupMsg(version)).to.equal(`Bot is starting version ${version}`);
+	});
+
+	it('Config with normal keys', function() {
+		expect(startupMsg(version, config)).to.equal(
+			`Bot is starting version ${version} with config ${JSON.stringify(config)}`
+		);
+	});
+
+	it('Config with redacted keys', function() {
+		const sensitiveConfig = {
+			mySecret: 'this is a secret',
+			...config,
+			token: 'this is a token',
+			PASSWORD: 'this is a password',
+		};
+
+		expect(startupMsg(version, sensitiveConfig)).to.equal(
+			`Bot is starting version ${version} with config ${JSON.stringify({
+				mySecret: '<REDACTED>',
+				...config,
+				token: '<REDACTED>',
+				PASSWORD: '<REDACTED>',
+			})}`
+		);
+	});
 });
 
 describe(stringify.name, function() {

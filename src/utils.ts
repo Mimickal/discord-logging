@@ -29,6 +29,9 @@
  */
 export const DISCORD_ID_PATTERN = RegExp('^\\d{17,22}$');
 
+/** Config keys containing these words should be redacted in logs. */
+const REDACTED_KEYS = ['password', 'secret', 'token'];
+
 /**
  * Joins the given array of strings using newlines.
  */
@@ -52,6 +55,31 @@ export function detail(thing: unknown): string {
 		// Fall back on standard strings
 		return stringify(thing);
 	}
+}
+
+/**
+ * Generates a standardized bot startup message containing the version and
+ * config with sensitive information scrubbed out.
+ */
+export function startupMsg(version: string, config?: Record<string, unknown>): string {
+	let msg = `Bot is starting version ${version}`;
+
+	if (config) {
+		const scrubbedConfig = Object
+			.keys(config)
+			.reduce<Record<string, unknown>>((data, key) => {
+				data[key] = REDACTED_KEYS.find(
+					rk => key.match(new RegExp(rk, 'i'))
+				)
+					? '<REDACTED>'
+					: config[key];
+				return data;
+			}, {});
+
+		msg += ` with config ${JSON.stringify(scrubbedConfig)}`;
+	}
+
+	return msg;
 }
 
 /**
