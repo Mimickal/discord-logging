@@ -24,11 +24,14 @@ import {
 	User,
 	TextChannel,
 	ChannelType,
+	ClientUser,
 } from 'discord.js';
+import { RawUserData } from 'discord.js/typings/rawDataTypes';
 
 import {
 	asLines,
 	detail,
+	loginMsg,
 	startupMsg,
 	stringify,
 	unindent,
@@ -71,6 +74,26 @@ it(unindent.name, function() {
 		  here
 		 	 in this string!
 	`)).to.equal('I have some cool info here in this string!');
+});
+
+it(loginMsg.name, function() {
+	// A thin child class that just makes the constructor public.
+	class TestClientUser extends ClientUser {
+		constructor(client: Client<true>, data: RawUserData) {
+			super(client, data);
+		}
+	}
+
+	const data: RawUserData = {
+		id: 'test_user_id',
+		username: 'test_bot_username',
+		discriminator: '1234',
+	};
+	const test_user = new TestClientUser(new Client<true>({ intents: [] }), data);
+
+	expect(loginMsg(test_user)).to.equal(
+		`Logged in as ${data.username}#${data.discriminator} (${test_user.id})`
+	);
 });
 
 describe(startupMsg.name, function() {

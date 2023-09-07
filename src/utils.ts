@@ -9,6 +9,7 @@
  import {
 	BaseChannel,
 	ChatInputCommandInteraction,
+	ClientUser,
 	CommandInteraction,
 	Emoji,
 	Guild,
@@ -55,6 +56,14 @@ export function detail(thing: unknown): string {
 		// Fall back on standard strings
 		return stringify(thing);
 	}
+}
+
+/**
+ * Generates a standardized bot message containing the user the bot
+ * successfully signed in as.
+ */
+export function loginMsg(user: ClientUser): string {
+	return `Logged in as ${user.tag} (${user.id})`;
 }
 
 /**
