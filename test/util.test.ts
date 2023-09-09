@@ -8,26 +8,37 @@
  ******************************************************************************/
 import { expect } from 'chai';
 import {
+	APIUser,
 	ApplicationCommandOptionType,
 	ButtonInteraction,
 	Client,
+	ChannelType,
 	ChatInputCommandInteraction,
 	ComponentType,
-	Emoji,
 	Guild,
 	GuildBan,
 	GuildMember,
 	InteractionType,
 	Message,
 	MessageReaction,
+	MessageType,
 	Role,
-	User,
 	TextChannel,
-	ChannelType,
-	ClientUser,
+	User,
 } from 'discord.js';
 import { RawUserData } from 'discord.js/typings/rawDataTypes';
 
+import {
+	TestChatInputCommandInteraction,
+	TestClientUser,
+	TestEmoji,
+	TestGuild,
+	TestGuildBan,
+	TestMessage,
+	TestMessageReaction,
+	TestTextChannel,
+	TestUser,
+} from './classes';
 import {
 	asLines,
 	detail,
@@ -77,13 +88,6 @@ it(unindent.name, function() {
 });
 
 it(loginMsg.name, function() {
-	// A thin child class that just makes the constructor public.
-	class TestClientUser extends ClientUser {
-		constructor(client: Client<true>, data: RawUserData) {
-			super(client, data);
-		}
-	}
-
 	const data: RawUserData = {
 		id: 'test_user_id',
 		username: 'test_bot_username',
@@ -142,37 +146,52 @@ describe(stringify.name, function() {
 	const guild_id = 'test_guild_id';
 	const user_id = 'test_user_id';
 
-
-	// Almost all of these constructors are private or protected. That already
-	// requires us to ignore TypeScript errors. Another effect of this is that
-	// the data payloads have crazy nested typing that's totally unreasonable
-	// for us to replicate here.
-	// Basically this is terrible and I'm ashamed.
-
 	const test_client = new Client({ intents: [] });
-	// @ts-ignore
-	const test_emoji = new Emoji(test_client, { id: emoji_id });
-	// @ts-ignore
-	const test_guild = new Guild(test_client, { id: guild_id });
-	// @ts-ignore
-	const test_channel = new TextChannel(test_guild, {
+	const test_emoji = new TestEmoji(test_client, { id: emoji_id, name: 'emoji' });
+	const test_guild = new TestGuild(test_client, { id: guild_id, unavailable: false });
+	const test_channel = new TestTextChannel(test_guild, {
 		id: channel_id,
+		name: 'test_channel',
 		type: ChannelType.GuildText,
-		permissions: '',
-	}, test_client);
-	// @ts-ignore
-	const test_user = new User(test_client, { id: user_id });
-	// @ts-ignore
-	const test_message = new Message(test_client, {
+	});
+	const test_user = new TestUser(test_client, { id: user_id, username: 'test_username' });
+	const test_message = new TestMessage(test_client, {
 		id: message_id,
 		channel_id,
+		author: {
+			...test_user,
+			flags: undefined,
+		},
+		attachments: [],
+		content: '',
+		edited_timestamp: null,
+		embeds: [],
+		mentions: [],
+		mention_everyone: false,
+		mention_roles: [],
+		pinned: false,
+		timestamp: '',
+		tts: false,
+		type: MessageType.Default,
+		// @ts-expect-error hack to change channel ID in stringify
 		guild_id,
 	});
-	// @ts-ignore
-	const test_react = new MessageReaction(
-		test_client, { emoji: test_emoji }, test_message
+	const test_api_user: APIUser = {
+		avatar: null,
+		discriminator: 'test_disc',
+		id: user_id,
+		username: 'test_username',
+	};
+	const test_react = new TestMessageReaction(
+		test_client, {
+			// Can't pass test_emoji in directly for some reason
+			emoji: { id: test_emoji.id, name: test_emoji.name },
+			count: 0,
+			me: false,
+		}, test_message
 	);
-	// @ts-ignore
+	// @ts-expect-error One large hack to make this pass as a button interaction.
+	// I have no idea how to do this while satisfying TypeScript.
 	const test_button = new ButtonInteraction(test_client, {
 		user: test_user,
 		message: { id: message_id, channel_id },
@@ -182,16 +201,14 @@ describe(stringify.name, function() {
 		},
 		type: InteractionType.MessageComponent,
 	});
-	// @ts-ignore
-	const test_ban = new GuildBan(test_client, {
+	const test_ban = new TestGuildBan(test_client, {
 		guild_id,
-		user: test_user,
+		user: test_api_user,
 	}, test_guild);
-
-	// @ts-ignore
-	const test_command = new ChatInputCommandInteraction(test_client, {
-		user: test_user,
+	const test_command = new TestChatInputCommandInteraction(test_client, {
+		user: test_api_user,
 		guild_id,
+		// @ts-expect-error hack to get these names in the string output.
 		data: {
 			name: 'testname',
 			options: [{
