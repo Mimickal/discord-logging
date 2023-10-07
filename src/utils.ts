@@ -7,6 +7,7 @@
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
  import {
+	Application,
 	BaseChannel,
 	ChatInputCommandInteraction,
 	ClientUser,
@@ -31,7 +32,7 @@
 export const DISCORD_ID_PATTERN = RegExp('^\\d{17,22}$');
 
 /** Config keys containing these words should be redacted in logs. */
-const REDACTED_KEYS = ['password', 'secret', 'token'];
+const REDACTED_KEYS = ['password', 'secret', 'token'] as const;
 
 /**
  * Joins the given array of strings using newlines.
@@ -44,13 +45,14 @@ export function asLines(...lines: (string | string[])[]): string {
  * Like {@link stringify}, but provides more detail. Falls back on stringify.
  */
 export function detail(thing: unknown): string {
-	if (thing instanceof CommandInteraction) {
-		const int = thing;
-		return `${stringify(int.guild)} ${stringify(int.user)} ${stringify(int)}`;
+	if (thing instanceof Application) {
+		return `Application "${thing.name}" (${thing.id})`;
+	}
+	else if (thing instanceof CommandInteraction) {
+		return `${stringify(thing.guild)} ${stringify(thing.user)} ${stringify(thing)}`;
 	}
 	else if (thing instanceof MessageReaction) {
-		const reaction = thing;
-		return `${stringify(reaction)} on ${stringify(reaction.message)}`;
+		return `${stringify(thing)} on ${stringify(thing.message)}`;
 	}
 	else {
 		// Fall back on standard strings
@@ -99,7 +101,10 @@ export function startupMsg(version: string, config?: Record<string, unknown>): s
  * This purposely only outputs IDs to limit the amount of user data logged.
  */
 export function stringify(thing: unknown): string {
-	if (thing instanceof BaseChannel) {
+	if (thing instanceof Application) {
+		return `Application ${thing.id}`;
+	}
+	else if (thing instanceof BaseChannel) {
 		return `Channel ${thing.id}`;
 	}
 	else if (thing instanceof CommandInteraction) {

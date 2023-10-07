@@ -9,14 +9,14 @@
 import { Logger, createLogger } from 'winston';
 
 export default class GlobalLogger {
-	static readonly #NO_OP_LOGGER: Logger = createLogger();
-	static #_logger: Logger | undefined;
+	private static readonly NO_OP_LOGGER: Logger = createLogger();
+	private static _logger: Logger | undefined;
 
 	static get logger(): Logger {
-		return GlobalLogger.#_logger ?? GlobalLogger.#NO_OP_LOGGER;
+		return GlobalLogger._logger ?? GlobalLogger.NO_OP_LOGGER;
 	}
 
 	static setGlobalLogger(logger: Logger | undefined): void {
-		GlobalLogger.#_logger = logger;
+		GlobalLogger._logger = logger;
 	}
 }

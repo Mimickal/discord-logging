@@ -7,6 +7,7 @@
  * <https://www.gnu.org/licenses/lgpl-3.0.en.html> for more information.
  ******************************************************************************/
 import {
+	Application,
 	ChatInputCommandInteraction,
 	Client,
 	ClientUser,
@@ -19,6 +20,7 @@ import {
 	User,
 } from 'discord.js';
 import {
+	RawApplicationData,
 	RawEmojiData,
 	RawGuildBanData,
 	RawGuildChannelData,
@@ -32,9 +34,15 @@ import {
 // Almost all of these class constructors are private or protected.
 // These are thin wrappers that expose those constructors in a type-safe way.
 
+export class TestApplication extends Application {
+	constructor(client: Client<true>, data: RawApplicationData) {
+		super(client, data);
+	}
+}
+
 export class TestChatInputCommandInteraction extends ChatInputCommandInteraction {
 	constructor(client: Client<true>, data: RawInteractionData) {
-		super(client, data)
+		super(client, data);
 	}
 }
 

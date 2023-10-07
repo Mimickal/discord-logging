@@ -9,6 +9,7 @@
 import { expect } from 'chai';
 import {
 	APIUser,
+	Application,
 	ApplicationCommandOptionType,
 	ButtonInteraction,
 	Client,
@@ -29,6 +30,7 @@ import {
 import { RawUserData } from 'discord.js/typings/rawDataTypes';
 
 import {
+	TestApplication,
 	TestChatInputCommandInteraction,
 	TestClientUser,
 	TestEmoji,
@@ -138,6 +140,8 @@ describe(startupMsg.name, function() {
 });
 
 describe(stringify.name, function() {
+	const app_id = 'test_app_id';
+	const app_name = 'My Cool Test App';
 	const button_id = 'test_button_id';
 	const channel_id = 'test_channel_id';
 	const emoji_id = 'test_emoji_id';
@@ -147,6 +151,7 @@ describe(stringify.name, function() {
 	const user_id = 'test_user_id';
 
 	const test_client = new Client({ intents: [] });
+	const test_app = new TestApplication(test_client, { id: app_id, name: app_name });
 	const test_emoji = new TestEmoji(test_client, { id: emoji_id, name: 'emoji' });
 	const test_guild = new TestGuild(test_client, { id: guild_id, unavailable: false });
 	const test_channel = new TestTextChannel(test_guild, {
@@ -223,6 +228,10 @@ describe(stringify.name, function() {
 	});
 
 	test_client.guilds.cache.set(guild_id, test_guild);
+
+	it(Application.name, function() {
+		expect(stringify(test_app)).to.equal(`Application ${app_id}`);
+	});
 
 	it(ButtonInteraction.name, function() {
 		expect(stringify(test_button)).to.equal(`Button "${button_id}"`);
@@ -328,6 +337,12 @@ describe(stringify.name, function() {
 	});
 
 	describe(detail.name, function() {
+		it(Application.name, function() {
+			expect(detail(test_app)).to.equal(
+				`Application "${app_name}" (${app_id})`
+			);
+		});
+
 		it(ChatInputCommandInteraction.name, function() {
 			expect(detail(test_command)).to.equal(
 				`Guild ${guild_id} User ${user_id} Command "testname subgroup subname"`
